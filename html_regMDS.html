@@ -1,0 +1,95 @@
+<!-- Modal -->
+<div class="modal fade" style="font-size:130%" id="regemp" tabindex="-1" role="dialog" aria-labelledby="regemp" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      <p class="h2" style="color:#006699">Registro de empleado</p>
+        <button id="regemp_popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="regemp_body-modal" class="modal-body">
+<div class="mx-auto">
+<div class="p-3 mx-auto">
+<div class="p-2">
+<div id="reg_mds_ocultar" class="collapse">
+<form id="regemp_registro" class="needs-validation" autocomplete="off" novalidate>
+  <div class="form-row">
+     <div class="col-md-6 mb-6">
+      <label for="regemp_emp_no">Numero de empleado</label>
+      <input type="text" class="form-control" id="regemp_emp_no" name="emp_no" pattern="^[0-9^\s]{5,10}$" maxlength="10" autocomplete="off" required autofocus>
+      <div class="invalid-feedback">
+        Ingresa solo números. 5 a 10 caractéres.
+      </div>
+    </div>
+       <div class="col-md-6 mb-6">
+      <label for="regemp_nombre">Nombre</label>
+      <input type="text" class="form-control" id="regemp_nombre" name="nombre" maxlength="20" autocomplete="off" placeholder="Nombre y Apellido" required>
+      <div class="invalid-feedback">
+       Ingresa nombre y apellido.
+      </div>
+    </div>
+    
+  </div>
+     <div class="form-row">
+    <div class="col-md-6 mb-6">
+      <label for="regemp_tipo">Tipo</label>
+      <select class="custom-select" id="regemp_tipo" name="tipo" form="regemp_registro" required>
+	<option selected disabled value="">Selecciona...</option>
+            <option value="mds">MDS/FA</option>
+            <option value="repa">Reparador</option>
+      </select>
+      <div class="invalid-feedback">
+        Por favor selecciona un tipo válido.
+      </div>
+    </div>
+  </div>
+   <div id="regemp_hide">
+  <div class="form-row">
+    <div class="col-md-6 mb-6">
+      <label for="regemp_correo">Correo electrónico</label>
+      <input type="text" class="form-control" id="regemp_correo" name="correo" placeholder="correo@example.com" pattern="^[A-Za-z0-9-._\.^\s]{6,35}@example.com\s*$" minlength="6" maxlength="35" autocomplete="off" required>
+      <div class="invalid-feedback">
+        Ingresa un correo válido.
+      </div>
+      <p class="text-left" style="padding:5px;font-size:85%;">Nota: Si aun no tienes cuenta de correo personal, registra el correo del lider de cuadrilla de tu area, cuando tengas tu correo personal registrate nuevamente.</p>
+    </div>
+    </div>
+    </div>
+  <br>
+  <input type="text" class="form-control" id="extra" pattern="^[0-9^\s]{5,10}$" required style="display:none">
+  <button id="regemp_enviar" type="submit" class="btn-lg btn btn-primary" onClick="regemp_validar();">Registrar</button>
+  <button id="regemp_borrar" type="reset" class="btn-lg btn btn-secondary" onClick="regemp_borrarDatos();">Limpiar</button>
+</form>
+</div>
+</div>
+<br>
+<div id="divsalida" class="p-2 alert text-center  alert-primary alert-dismissible fade show" role="alert"><p id="regemp_salida" class="h4">
+Ingresa la información solicitada.
+</p><span id="regemp_loading" class="" role="status" aria-hidden="true" ></span>
+</div>
+
+</div>
+</div>
+</div>
+
+
+      <div class="p-2 text-center">
+      <span id="regemp_loading" class="" role="status" aria-hidden="true" ></span>
+      </div>
+      <div class="modal-footer">
+        <button id="regemp_cerrar_boton" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+ </div>                                                                          
+
+
+
+
+    
+     <script>
+ document.getElementById('regemp_tipo').addEventListener("input", ocultar);
+     
+    </script>
