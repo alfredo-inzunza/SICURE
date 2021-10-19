@@ -1,0 +1,247 @@
+<SCRIPT>
+const tiempoActualizacion = 11;
+var servicioActualizacion = setInterval(buscarActualizacion,tiempoActualizacion*60000);
+const client = new Date().valueOf();
+var version = 0;
+function buscarVersion(){
+    console.log('Buscando version...')
+ google.script.run.withSuccessHandler(function (e){version = e; console.log("Version="+version);}).buscarVersion();
+}
+buscarVersion();
+
+function buscarActualizacion(){
+  console.log('Buscando actualizacion...')
+return google.script.run.withSuccessHandler(actualizarPagina).buscarActualizacion(version);
+}
+
+function actualizarPagina(result){
+  console.log('Actualizar?? '+!result)
+if(!result){
+  document.getElementById("enviar").disabled = true;
+  $("#popup_actualizar").modal({keyboard:false});
+}
+}
+
+function temporizador(tiempo,elemento){
+var countDownDate = new Date().getTime()+(tiempo*1000);
+var x = setInterval(function() {
+  var now = new Date().getTime();
+  var distance = countDownDate - now;
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+  if (distance < 1000) {
+    clearInterval(x);
+    document.getElementById(elemento).innerHTML = "Cerrar";
+  } else document.getElementById(elemento).innerHTML ="Cerrar ("+seconds+")";
+}, 100);
+}
+
+var silent = false;
+function enviarRegistro(datos) {
+            var form = document.getElementById('registro');
+            var serial = form.sn_unidad.value.trim();
+            var reparacion = form.reparacion.value;
+            var div = document.getElementById('salida');
+            var nombre = form.nombre;
+            var correo = form.correo;
+            
+            var empleado = form.emp_no.value;
+            lastEmp = ""+empleado;
+            if(registros_empleados[1][empleado]) {
+              nombre.value = registros_empleados[1][empleado];
+              correo.value = registros_empleados[0][empleado];
+              }
+              else {
+                nombre.value = "NUM. EMP "+empleado;
+                correo.value = "alfredo.inzunza@gmail.com";
+              }
+              var eviar;
+            datos[serial.toUpperCase()] == reparacion.toUpperCase() ? enviar = false : enviar = true;
+
+            console.log(enviar);
+            if(enviar){
+            $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "Enviando";
+            document.getElementById('body-modal').innerHTML = nombre.value+" por favor espera, se está enviando la información...";
+            div.innerHTML = "Enviando...";
+            var form = document.getElementById('registro');
+            return google.script.run.withSuccessHandler(escribir).withFailureHandler(falla).sendConsulta(form);
+            } else {
+            $("#popup_mod").modal();
+             document.getElementById('titulo-modal').innerHTML = "Error";
+             document.getElementById('body-modal').innerHTML = nombre.value+", este numero de serie ya está ingresado en el contenedor. Valida la información";
+             div.innerHTML = serial.toUpperCase()+" ya se encuentra en el contenedor.";
+             document.getElementById('loading').className="";
+             document.getElementById('loading2').className="";
+             document.getElementById('sn_unidad').focus();
+            document.getElementById("enviar").disabled = false;
+            document.getElementById("enviar").className =  "btn-lg btn btn-primary";
+            }
+            
+            }
+            
+            function consultaEmpleados() {
+            if(!silent){
+            var div = document.getElementById('salida');
+            div.innerHTML = "Descargando información de empleados...";
+            document.getElementById('loading').className="spinner-border spinner-border-sm";
+            document.getElementById('loading2').className="spinner-border spinner-border-sm text-primary";
+            }
+            return google.script.run.withSuccessHandler(guardar).withFailureHandler(falla).consultar_empleados();
+            
+            }
+             
+            function guardar(data) {
+            if(!silent){
+            var div = document.getElementById('salida');
+            div.innerHTML = 'Listo. Ingresa la información solicitada.';
+            document.getElementById('loading').className="";
+            document.getElementById('loading2').className="";
+            }
+            registros_empleados=data;
+            document.getElementById('sn_unidad').focus();
+            silent = false;
+            //$("#emp_no").change(function(){validateName();});
+            }
+        
+        function points(tiempo, elemento){
+          var countDownDate = new Date().getTime()+(tiempo*1000);
+          var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);  
+            if (distance < 1000) {
+              clearInterval(x);
+              document.getElementById(elemento).innerHTML = "Cerrar";
+            } else if(distance%1000 >=0 || distance%1000 < 333 ) document.getElementById(elemento).innerHTML =".";
+             else if(distance%1000 >=334 || distance%1000 < 666 ) document.getElementById(elemento).innerHTML ="..";
+             else if(distance%1000 >=667 || distance%1000 < 999 ) document.getElementById(elemento).innerHTML ="...";
+          }, 100);
+        }
+
+
+        function validateName(){
+        var emp_no = $("#emp_no").val();
+        console.log("validando"+emp_no.length);
+        if(registros_empleados[0][emp_no]) {
+          var nombre = registros_empleados[0][emp_no];
+          var correo = registros_empleados[1][emp_no];
+        } else {
+        var nombre = false;
+        var correo = false;
+        };
+
+        if(nombre){
+        if(correo=="under_validation@example.com"){
+        $("#nombre_emp").html("<span style='color:#006699'>"+nombre+"</span><span style='font-size:80%;color:#f03232'>(Correo sin confirmar)</span>");
+        }else $("#nombre_emp").html("<span style='color:#006699'>"+nombre+"</span>");
+        
+        }else $("#nombre_emp").html("<span style='color:#f03232'>Numero de empleado <b>"+emp_no+"</b> no registrado</span>");
+        
+        }
+        
+
+
+        function contacto(){
+        $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "About";
+            document.getElementById('body-modal').innerHTML = "Design & Develpment by jose,inzunza";
+            temporizador(5,"cerrar_boton");
+        }
+
+        function escribir() {
+       
+        var validacion_empleado = 0;
+        var empleado = document.getElementById('emp_no').value;
+        var nombre = document.getElementById('nombre').value;
+        registros_empleados[0][empleado] ?  validacion_empleado = 1 : validacion_empleado = 0;
+
+            var div = document.getElementById('salida');
+            var div2 = document.getElementById('popup');
+            var serial = document.getElementById('sn_unidad').value.toUpperCase();
+            var footer = document.getElementById('footer');
+            $("#popup_mod").modal();
+              document.getElementById('titulo-modal').innerHTML = "Listo";
+            if(validacion_empleado==1) document.getElementById('body-modal').innerHTML = nombre+', la información del ensamble <b>'+serial+'</b> se ha registrado de forma correcta.';
+            else document.getElementById('body-modal').innerHTML = nombre+', la información del ensamble <b>'+serial+'</b> se ha registrado de forma correcta. Favor de realizar registro de empleado, leer nota al final de la página.';
+             div.innerHTML='El ensamble <b>'+serial+'</b> se ha registrado correctamente.';
+            document.getElementById('loading').className="";
+            document.getElementById('loading2').className="";
+            setTimeout(function myfunct(){document.getElementById('popup_close').click();},2500);
+            temporizador(3,"cerrar_boton");
+            
+            //div.innerHTML = "Gracias "+nombre+", la información del ensamble <b>"+serial+"</b> se ha registrado de forma correcta.";
+            if(validacion_empleado==0){
+            //div.innerHTML += (registros_empleados.length-1)+" "+registros_empleados;
+            div2.innerHTML = '<div class="alert text-center alert-warning alert-dismissible fade show" style="font-size:120%" role="alert">  <strong>Nota:</strong> La información de la unidad <b>'+serial+' </b> se ha registrado de forma correcta pero el empleado <b>'+empleado+'</b> no está registrado. Favor de realizar el <a class="button" data-toggle="modal" href="#regemp" >registro aqui</a> o con el supervisor del turno.<br><br><span style="font-size:90%">Nota: Si ya está registrado y continua apareciendo este mensaje actualiza la página para recargar la lista de empleados.</span>  <button id="regemp_popup_close2" type="button" class="close" data-dismiss="alert" aria-label="Close">    <span aria-hidden="true">&times;</span>  </button></div>';
+            document.getElementById("regemp_emp_no").value = empleado;
+            document.getElementById("regemp_tipo").value = "mds";
+                        }
+            borrarDatos();
+        }
+
+        function falla(error) {
+            var div = document.getElementById('salida');
+            document.getElementById('divsalida').className="alert text-center alert-danger alert-dismissible fade show";
+            div.innerHTML = error.message;
+            document.getElementById('loading').className="";
+            document.getElementById('loading2').className="";
+            document.getElementById("enviar").disabled = false;
+            document.getElementById("enviar").className =  "btn-lg btn btn-primary";
+            document.getElementById("registro").className =  "needs-validation";
+            silent = false;
+        }
+        
+        
+function cargarDatos() {
+var div = document.getElementById('salida');
+            $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "Validando.";
+            document.getElementById('body-modal').innerHTML = "Validando informacion...";
+            div.innerHTML = "Validando......";
+
+
+            
+            document.getElementById('divsalida').className="alert text-center alert-primary alert-dismissible fade show";
+            div.innerHTML = "Cargando datos...";
+            document.getElementById('loading').className="spinner-border spinner-border-sm";
+            document.getElementById('loading2').className="spinner-border spinner-border-sm text-primary";
+            document.getElementById("enviar").disabled = true;
+            document.getElementById("enviar").className =  "btn-lg btn btn-primary disabled";
+            return google.script.run.withSuccessHandler(enviarRegistro).withFailureHandler(falla).cargarDatos();
+        }
+        
+        function borrarDatos() {
+        var f = document.forms["registro"].elements;
+            for (var i = 0; i < f.length; i++) {
+                f[i].value = "";
+            }
+            document.getElementById('sn_unidad').focus();
+            document.getElementById("enviar").disabled = false;
+            document.getElementById("enviar").className =  "btn-lg btn btn-primary";
+            document.getElementById("registro").className =  "";          
+           
+}
+
+function validar() {
+	var form = document.getElementById('registro');
+	var boton = document.getElementById('enviar');
+            var div = document.getElementById('salida');
+            var pat_emp = new RegExp("^[0-9^\s]{5,10}$");
+            var pat_sn = new RegExp("^[a-zA-Z0-9\-^\s]{6,12}$");
+            var f = document.forms["registro"].elements;
+            var submt = true;
+            var result = pat_sn.test(f[0].value.trim());
+            var result1 = pat_emp.test(f[1].value.trim());
+
+            for (var i = 0; i < f.length - 6; i++) {
+            console.log(f[i].value);
+                if (f[i].value.length == 0) submt = false;
+            }
+            if (submt && result && result1) {
+cargarDatos();
+//form.submit();
+            } 
+else console.log("Full = "+submt+",SN = "+result+", Emp = "+result1+", Flength="+f.length);
+        }
+</script>
