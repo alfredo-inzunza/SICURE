@@ -7,7 +7,7 @@ function getScriptURL() {
 }
 
 function buscarActualizacion(version){
-var libro=SpreadsheetApp.openById('vQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg1ucSZ');
+var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja=libro.getSheetByName('update');
   var versionNew = hoja.getRange(2,1).getValue();
   var result = (version == versionNew)
@@ -15,7 +15,7 @@ var libro=SpreadsheetApp.openById('vQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg1ucSZ'
 }
 
 function buscarVersion(){
-var libro=SpreadsheetApp.openById('vQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg1ucSZ');
+var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja=libro.getSheetByName('update');
   var versionNew = hoja.getRange(2,1).getValue();
   return versionNew;
@@ -35,7 +35,7 @@ return res;
 }
 
 function cargarDatos(){
-  var libro=SpreadsheetApp.openById('1ucSZvQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg');
+  var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja=libro.getSheetByName('Contenedor');
   var NoF=hoja.getLastRow();
   var registros=hoja.getRange(2,2,NoF,4).getValues();
@@ -44,7 +44,7 @@ function cargarDatos(){
 
 function sendConsulta(form){
   var registro = [[new Date(),form.sn_unidad.toUpperCase().trim(),form.emp_no.trim(),form.familia.toUpperCase(),form.reparacion.toUpperCase(),form.detalle.toUpperCase(),form.nombre,form.correo]];
-  var libro=SpreadsheetApp.openById('1ucSZvQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg');
+  var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja=libro.getSheetByName('Contenedor');
   var NoF=hoja.getLastRow();
   var NoFMAX=hoja.getMaxRows();
@@ -54,7 +54,7 @@ function sendConsulta(form){
 }
 
 function consultar_empleados(){
-  var libro=SpreadsheetApp.openById('1ucSZvQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg');
+  var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja_empleados=libro.getSheetByName('Empleados');
   var NoF_empleados=hoja_empleados.getLastRow();
   var registros_empleados=hoja_empleados.getRange(2,1,NoF_empleados,3).getValues();
@@ -89,7 +89,7 @@ function regemp_enviarDatos(form){
   if (tipo == "repa"){
   var correo = "jose.inzunza@example.com";
     var registro = [[emp_no,nombre,correo,tipo]];
-  var libro=SpreadsheetApp.openById('1ucSZvQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg');
+  var libro=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4');
   var hoja=libro.getSheetByName('Empleados');
   var NoF=hoja.getLastRow();
   var registros=hoja.getRange(2,1,NoF,1).getValues();
@@ -118,8 +118,8 @@ function regemp_enviarDatos(form){
     var regid = "1"+ext+ext2+"cienaoptical";
   var registro = [[regid,emp_no,nombre,correo,tipo]];
   var registro2 = [[emp_no,nombre,"under_validation@example.com",tipo]];
-  var libro=SpreadsheetApp.openById('Cyo0bsABPiAOhv7AW-ARvtG5PpUygwYIN8HQGogM1EpG'); //libro validaciones
-  var libro2=SpreadsheetApp.openById('vQvz4ibi9nVC6PdEBTGMYZQpT2DbvJ9ygXpnHQg1ucSZ'); //libro base de datos
+  var libro=SpreadsheetApp.openById('1s5s3KLMKL1YSm-ec67euHWQYzV_eOlkXstYEcnHQQCc'); //libro validaciones
+  var libro2=SpreadsheetApp.openById('1IHa_y_G_UvBjIjGw-PompDJarlRhW0AFEHXxodDRMn4'); //libro base de datos
   var hoja=libro.getSheetByName('validaciones');
   var hoja2=libro2.getSheetByName('Empleados');
   var NoF=hoja.getLastRow();
