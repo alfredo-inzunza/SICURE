@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<?!= include('javascriptHead'); ?>
+<?!= include('js_regMDS'); ?>
+    <title>Registro de entrada</title>
+
+
+  </head>
+  <body>
+<div id = "maindiv">
+<div class="mx-auto">
+<div class="p-3 mx-auto">
+<div class="p-2">
+<p class="h2" style="color:#006699">Registro de entrada</p>
+<form id="registro" class="needs-validation" autocomplete="off" novalidate>
+  <div class="form-row">
+     <div class="col-md-4 mb-4">
+      <label for="sn_unidad">Numero de serie</label>
+      <input type="text" class="form-control" id="sn_unidad" name="sn_unidad" pattern="^[a-zA-Z0-9\-^\s]{6,12}$" maxlength="12" autocomplete="off" required autofocus>
+      <div class="invalid-feedback">
+        Solo letras, números y guión medio. 6 a 10 caracteres
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <label for="emp_no">Numero de empleado</label>
+      <input type="text" class="form-control" id="emp_no" name="emp_no" pattern="^[0-9^\s]{5,10}$" maxlength="10" autocomplete="off" required >
+      <div class="invalid-feedback">
+        Ingresa solo números. 5 a 10 caractéres
+      </div>
+    </div>
+  <div style="margin-top: auto; margin-bottom: auto; margin-left: 30px">
+      <p class="h5" id="nombre_emp" ></p>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-4 mb-4">
+      <label for="familia">Familia</label>
+      <select class="custom-select" id="familia" form="registro" name="familia" required>
+	<option selected disabled value="">Selecciona...</option>
+	<option value="ares">Ares</option>
+	<option value="wl3">WL3</option>
+        <option value="deimos">Deimos</option>
+        <option value="hybridas">Hybridas</option>
+      </select>
+      <div class="invalid-feedback">
+        Por favor selecciona una familia válida.
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <label for="reparacion">Reparacion</label>
+      <select class="custom-select" id="reparacion" name="reparacion" form="registro" required>
+                    <option value=""></option>
+                    <option value="splicing">Splicing</option>
+                    <option value="ensamble">Ensamble</option>
+                    <option value="desensamble bga">Desensamble-BGA</option>
+                    <option value="desensamble cambio de optico">Desensamble-Cambio de optico</option>
+                    <option value="desensamble debug">Desensamble-Debug</option>
+                    <option value="desensamble reparacion sencilla">Desensamble-Reparacion sencilla</option>
+                    <option value="desrutear fibras">Desrutear fibras</option>
+                    <option value="retrabajo">Retrabajo</option>
+      </select>
+      <div class="invalid-feedback">
+        Por favor selecciona un tipo de reparación válido.
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <label for="detalle">Detalle (Opcional)</label>
+      <input type="text" class="form-control" id="detalle" name="detalle" placeholder="Detalle" maxlength="16" autocomplete="off">
+      <div class="invalid-feedback">
+<input type="text" class="form-control" id="extra" pattern="^[0-9^\s]{5,10}$" required style="display:none">
+               <input type="hidden" id="nombre" name="nombre" placeholder="Detalle">
+            <input type="hidden" id="correo" name="correo" placeholder="Detalle">
+      </div>
+    </div>
+  </div>
+  <button id="enviar" type="submit" class="btn-lg btn btn-primary" onClick="validar();">Registrar</button>
+  <button id="borrar" type="reset" class="btn-lg btn btn-secondary" onClick="borrarDatos();">Limpiar</button>
+</form>
+</div>
+<br>
+<div id="divsalida" class="p-2 alert text-center  alert-primary alert-dismissible fade show" role="alert"><p id="salida" class="h4">
+</p><span id="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" ></span>
+</div>
+
+
+<div id="popup">
+  </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" style="font-size:130%" id="popup_mod" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="popup_mod" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" style="color:#006699" id="titulo-modal">Titulo</h5>
+        <button id="popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="body-modal" class="modal-body">
+        Contenido del cuadro de texto.
+      </div>
+      <div class="p-2 text-center">
+      <span id="loading2" class="" role="status" aria-hidden="true" ></span>
+      </div>
+      <div class="modal-footer">
+        <button id="cerrar_boton" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Modal -->
+<div class="modal fade" style="font-size:130%" id="popup_mod1" tabindex="-1" role="dialog" aria-labelledby="popup_mod1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" style="color:#006699" id="titulo-modal">About</h5>
+        <button id="popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="body-modal" class="modal-body">
+        Design & Development by jose.inzunza
+      </div>
+      <div class="p-2 text-center">
+      <span id="loading2" class="" role="status" aria-hidden="true" ></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<?!= include('html_regMDS'); ?>
+
+ <!-- Modal -->
+<div class="modal fade" style="font-size:140%" id="popup_actualizar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="popup_actualizar" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <p style="color:#006699" id="titulo-modal"><b>Actualización encontrada.</b></p>
+      </div>
+      <div id="body-modal" class="modal-body">
+        <p>Existe una nueva actualización, por favor recarga/actualiza esta página para continuar utilizando la aplicación.</p>
+      </div>
+      <div class="modal-footer">
+        <p style="font-size:80%; text-align: right">Reporta anomalias a jose.inzunza</p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+</div>
+     
+<?!= include('javascriptBody'); ?>
+     
+  </body>
+</html>
