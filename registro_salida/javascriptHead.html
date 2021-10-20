@@ -1,0 +1,436 @@
+ <script>
+const tiempoActualizacion = 10;
+var servicioActualizacion = setInterval(buscarActualizacion,tiempoActualizacion*60000);
+
+const client = new Date().valueOf();
+var version = 0;
+function buscarVersion(){
+    console.log('Buscando version...')
+ google.script.run.withSuccessHandler(function (e){version = e; console.log("Version="+version);}).buscarVersion();
+}
+buscarVersion();
+
+function buscarActualizacion(){
+  console.log('Buscando actualizacion...')
+return google.script.run.withSuccessHandler(actualizarPagina).buscarActualizacion(version);
+}
+
+function actualizarPagina(result){
+  console.log('Actualizar?? '+!result)
+if(!result){
+  document.getElementById("enviar").disabled = true;
+  $("#popup_actualizar").modal({keyboard:false});
+}
+}
+
+        var registros_empleados = [];
+        function stopRKey(evt) {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type == "text")) {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+
+        function abrir() {
+            var div = document.getElementById("main_r");
+            div.className = "abrir";
+            var div2 = document.getElementById("child_r");
+            div2.className = "abrir1";
+
+        }
+
+        function cerrar() {
+            var div = document.getElementById("main_r");
+            div.className = "cerrar";
+            var div2 = document.getElementById("child_r");
+            div2.className = "cerrar1";
+
+        }
+
+        function unhide() {
+            var div = document.getElementById("ocultar");
+            var campo = document.getElementById("detalle");
+            div.style.display = "block";
+            campo.disabled = false;
+        }
+
+        function hide() {
+            var div = document.getElementById("ocultar");
+            var campo = document.getElementById("detalle");
+            //campo.value=" ";
+            div.style.display = "none";
+            //campo.disabled = true;     
+        }
+
+        function rojo() {
+            var emp = document.getElementById("emp_no");
+            var pat_emp = new RegExp("^[0-9^\s]{6,8}$");
+            var result = pat_emp.test(emp.value);
+            if (result) {
+                emp.className = "inputp";
+            } else {
+                emp.className = "inputf";
+            }
+        }
+
+        function rojo1() {
+            var emp = document.getElementById("detalle");
+            var result = (emp.value.length > 5);
+            if (result) {
+                emp.className = "inputp";
+            } else {
+                emp.className = "inputf";
+            }
+        }
+
+        function hide2() {
+            var l = document.querySelector('input[name="laser"]:checked').value;
+            var m = document.querySelector('input[name="medicion"]:checked').value;
+            //alert(l+" "+m);
+        }
+
+
+        function no_medicion() {
+            var medicion = document.getElementsByName('medicion');
+            medicion[0].checked = false;
+            medicion[1].checked = true;
+        }
+
+        function deimos() {
+            var div = document.getElementById("deimos");
+            var clase = div.className;
+            var datos = window.value;
+            var mostrar = false;
+            var serial = document.getElementById("unidades").value;
+            for (var i = 0; i <= datos.length - 1; i++) {
+                if (datos[i] == serial) {
+                    mostrar = true;
+                    break;
+                }
+            }
+            if (mostrar && clase != "a-opacity0-100") unhide_deimos();
+            else if (!mostrar && clase == "a-opacity0-100") hide_deimos();
+            return mostrar;
+        }
+
+        function unhide_deimos() {
+            var laser = document.getElementsByName('laser');
+            laser[0].checked = false;
+            laser[1].checked = false;
+            var medicion = document.getElementsByName('medicion');
+            medicion[0].checked = false;
+            medicion[1].checked = false;
+            var div = document.getElementById("deimos");
+            div.className = "a-opacity0-100";
+            //div.style.display = "block";
+
+
+        }
+
+        function hide_deimos() {
+            var div = document.getElementById("deimos");
+            div.className = "a-opacity100-0";
+            //div.style.display = "none";
+            var laser = document.getElementsByName('laser');
+            laser[0].checked = false;
+            laser[1].checked = true;
+            var medicion = document.getElementsByName('medicion');
+            medicion[0].checked = false;
+            medicion[1].checked = true;
+        }
+
+
+        function validar() {
+            var reparada = document.getElementsByName('reparada');
+            var status = reparada[1].checked;
+            var div = document.getElementById('salida');
+            var pat_emp = new RegExp("^[0-9^\s]{5,10}$");
+            var f = document.forms["registro"].elements;
+            var submt = true;
+            var boton = document.getElementById('enviar');
+            var laser = document.getElementsByName('laser');
+            var medicion = document.getElementsByName('medicion');
+            var deimos1 = deimos();
+            if (!deimos1) var result2 = true;
+            else var result2 = ((laser[0].checked && (medicion[0].checked || medicion[1].checked)) || (laser[1].checked));
+
+            var result1 = pat_emp.test(f[1].value);
+            var contador = f.length - 5;
+            if (status) {
+                contador = f.length - 4;
+                submt = (document.getElementById("detalle").value.length > 6);
+                document.getElementById("detalle").required = true;
+            }
+            else document.getElementById("detalle").required = false;
+            for (var i = 0; i < contador; i++) {
+                if (f[i].value.length == 0) {
+                    submt = false;
+                }
+                console.log(f[i].id + "." + f[i].value + "." + f[i].checked);
+            }
+            if (submt && result1 && result2) {
+                //boton.disabled = false;
+                //boton.className = "button button2 enabled";
+                console.log("HABILITADO");
+                console.log("Full = " + submt + ", Status = " + status + ", Emp = " + result1 + ", Flength=" + f.length);
+                enviarRegistro();
+            } else {
+                //boton.disabled = true;
+                //boton.className = "button button2 disabled";
+                console.log("DESHABILITADO");
+                console.log("Full = " + submt + ", Status = " + status + ", Emp = " + result1 + ", Flength=" + f.length);
+            }
+            console.log("---------");
+        }
+
+
+        function enviarRegistro() {
+            var boton = document.getElementById('enviar');
+            var nombre = document.getElementById('nombre');
+            var empleado = document.getElementById('emp_no').value;
+            lastEmp = empleado;
+            var validacion_empleado = 0;
+
+            for (var i = 0; i <= registros_empleados.length - 1; i++) {
+                if (registros_empleados[i][0] == empleado) {
+                    validacion_empleado = 1;
+                    nombre.value = registros_empleados[i][1];
+                    break;
+                }
+            }
+            if (validacion_empleado == 0) {
+                nombre.value = "NUM. EMP " + empleado;
+            }
+
+
+            boton.disabled = true;
+            //boton.className = "button button2 disabled";
+            var form = document.getElementById('registro');
+            var div = document.getElementById('salida');
+            $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "Enviando";
+            document.getElementById('body-modal').innerHTML = nombre.value + " por favor espera, se está enviando la información...";
+            document.getElementById('loading2').className = "spinner-border spinner-border-sm";
+            div.innerHTML = nombre.value + " por favor espera, se está enviando la información...";
+            document.getElementById('loading').className = "spinner-border spinner-border-sm";
+              console.log('Enviando registro...')
+            google.script.run.withSuccessHandler(listo).withFailureHandler(falla).eliminarRegistro(form);
+        }
+
+        function temporizador(tiempo) {
+            var countDownDate = new Date().getTime() + (tiempo * 1000);
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                if (distance < 1000) {
+                    clearInterval(x);
+                    document.getElementById("cerrar_boton").innerHTML = "Cerrar";
+                } else document.getElementById("cerrar_boton").innerHTML = "Cerrar (" + seconds + ")";
+            }, 100);
+        }
+
+        function listo() {
+            var validacion_empleado = 0;
+            var empleado = document.getElementById('emp_no').value;
+            var nombre = document.getElementById('nombre').value;
+            var sers = document.getElementById("unidades").value;
+            var sers2 = sers.split("*");
+            var serial = sers2[0];
+            for (var i = 0; i <= registros_empleados.length - 1; i++) {
+                if (registros_empleados[i][0] == empleado) validacion_empleado = 1;
+            }
+            if (validacion_empleado == 0) {
+
+                document.getElementById('body-modal').innerHTML = 'La unidad ' + serial + 'ha sido removida del contenedor pero el empleado ' + empleado + ' no está registrado.<br>Favor de realizar el <a href="https://sites.google.com/a/sanmina.com/sicure/registro-usuario" target="_blank" >registro en el sistema aqui</a> o con el supervisor/líder del turno.br><span style="font-size:90%">Nota: Si ya está registrado actualiza la página para evitar este mensaje.</span><br></p>';
+
+            } else {
+                document.getElementById('body-modal').innerHTML = nombre + ", la unidad <b>" + serial + "</b> ha sido removida del contenedor";
+                setTimeout(function myfunct() { document.getElementById('popup_close').click(); }, 2500);
+                temporizador(3);
+            }
+            var s = document.getElementById("unidades").options;
+            var div = document.getElementById('salida');
+            var conteo = s.length - 1;
+            for (var i = 0; i <= s.length - 1; i++) {
+                if (s[i].value == sers) s.remove(i);
+
+            }
+            document.getElementById("emp_no").value = "";
+            document.getElementById("detalle").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("si").checked = true;
+            //document.getElementById("unidades").disabled = true;
+            document.getElementById('enviar').disabled = false;
+            $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "Listo";
+            document.getElementById('loading2').className = "";
+            document.getElementById('loading').className = "";
+            div.innerHTML = serial + " ha sido removida del contenedor";
+
+
+
+        }
+
+        function cargarDatos() {
+            var div = document.getElementById('salida');
+
+            div.innerHTML = "Cargando datos...";
+            document.getElementById('loading').className = "spinner-border spinner-border-sm";
+            document.getElementById("unidades").disabled = true;
+            //document.getElementById("enviar").disabled = true;
+            //document.getElementById("enviar").className = "button button2 disabled";
+              console.log('Cargando datos...')
+            return google.script.run.withSuccessHandler(escribir).withFailureHandler(falla).sendConsulta();
+
+        }
+
+
+
+        function escribir(datos) {
+        //console.log(datos);
+            var div = document.getElementById('salida');
+            var a = document.getElementById("actualizar");
+            var s = document.getElementById("unidades");
+            var e = document.getElementById("emp_no");
+            var opcion;
+            var comparar;
+            var posicion;
+            var posicion2;
+            var posicion3;
+            var posicion4;
+            var rep;
+            var ser;
+            var seriales = datos;
+            window.value = [];
+            for (var i = 0; i <= datos.length - 1; i++) {
+                posicion = seriales[i][0].indexOf(" ");
+                posicion2 = seriales[i][0].indexOf("DEIMOS");
+                var nuevo = seriales[i][0].split(" ");
+
+                if (nuevo[6] == 'DESENSAMBLE' && nuevo[7] == "BGA") nuevo[6] = "DESENSAMBLE BGA";
+                else if (nuevo[6] == 'DESENSAMBLE' && nuevo[7] == "CAMBIO") nuevo[6] = "DESENSAMBLE CAMBIO DE OPTICO";
+                else if (nuevo[6] == 'DESENSAMBLE' && nuevo[7] == "DEBUG") nuevo[6] = "DESENSAMBLE DEBUG";
+                else if (nuevo[6] == 'DESENSAMBLE' && nuevo[7] == "REPARACION") nuevo[6] = "DESENSAMBLE REPARACION SENCILLA";
+                else if (nuevo[6] == 'DESRUTEAR' && nuevo[7] == "FIBRAS") nuevo[6] = "DESRUTEAR FIBRAS";
+                var rep = nuevo[6];
+                /*if(i==0){
+                var opt1 = document.createElement("option");
+                opt1.text="Selecciona una unidad...";
+                opt1.value="";
+                opt1.disabled=true;
+                s.add(opt1);
+                
+                }*/
+
+                opcion = document.createElement("option");
+                opcion.text = datos[i][0];
+                ser = seriales[i][0].slice(0, posicion);
+                opcion.value = ser + "*" + rep;
+
+                if (posicion2 > 0) window.value.push(opcion.value);
+                s.add(opcion);
+            }
+            //window.deimos = 
+            div.innerHTML = "Se han cargado los datos de forma correcta";
+            document.getElementById('loading').className = "";
+            s.disabled = false;
+            //e.focus();
+            //hide();
+            //alert(window.value);
+            if (a.disabled) {
+                setTimeout(habilitar, 30000);
+            }
+            deimos();
+        }
+
+
+        function borrarDatos() {
+            document.getElementById('emp_no').focus();
+            document.getElementById("enviar").disabled = false;
+            document.getElementById("enviar").className = "btn-lg btn btn-primary";
+            document.getElementById("registro").className = "";
+            actualizar();
+
+        }
+
+        function actualizar() {
+            document.getElementById("unidades").disabled = true;
+            //document.getElementById("enviar").disabled = true;
+            //document.getElementById("enviar").className = "button button2 disabled";
+            document.getElementById("actualizar").disabled = true;
+            //document.getElementById("actualizar").className = "button button disabled";
+            var s = document.getElementById("unidades");
+            var contador = s.options.length - 2;
+            for (var i = 0; i <= contador; i++) {
+                s.remove(1);
+            }
+            cargarDatos();
+        }
+
+
+        function habilitar() {
+            document.getElementById("actualizar").disabled = false;
+            //document.getElementById("actualizar").className = "button button enabled";
+        }
+
+        function falla(error) {
+        
+        console.log(error);
+            //deimos();
+            //var s = document.getElementById("unidades").options;
+            //var serial = document.getElementById("unidades").value;
+            //var div = document.getElementById('salida');
+            //var conteo = s.length - 1;
+            //for (var i = 0; i <= s.length - 1; i++) {
+               // if (s[i].value == serial) s.remove(i);
+            //}
+            document.getElementById("emp_no").value = "";
+            document.getElementById("detalle").value = "";
+            document.getElementById("detalle").nombre = "";
+            var div = document.getElementById('salida');
+            div.innerHTML = error.message;
+            $("#popup_mod").modal();
+            document.getElementById('titulo-modal').innerHTML = "Error";
+            document.getElementById('body-modal').innerHTML = div.innerHTML = error.message;
+            document.getElementById('loading2').className = "";
+            document.getElementById('loading').className = "";
+            document.getElementById('enviar').disabled = false;
+
+            setTimeout(habilitar, 30000);
+        }
+
+        function consultaEmpleados() {
+            var div = document.getElementById('salida');
+            div.innerHTML = "Descargando información de reparadores...";
+            document.getElementById('loading').className = "spinner-border spinner-border-sm";
+              console.log('Consultando empleados...')
+            return google.script.run.withSuccessHandler(guardar).consultar_empleados();
+
+        }
+
+        function guardar(data) {
+            var div = document.getElementById('salida');
+            div.innerHTML = 'Listo.';
+            document.getElementById('loading').className = "";
+            registros_empleados = data;
+            cargarDatos();
+        }
+
+        function popup_a() {
+            var div = document.getElementById("popup");
+            div.className = "popup_a";
+            var div2 = document.getElementById("principal");
+            div2.className = "principal a-opacity100-50";
+        }
+
+        function popup_c() {
+            var div = document.getElementById("popup");
+            div.className = "popup_c";
+            var div2 = document.getElementById("principal");
+            div2.className = "principal a-opacity50-100";
+        }
+    </script>
