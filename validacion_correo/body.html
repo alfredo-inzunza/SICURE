@@ -1,0 +1,36 @@
+ <script>
+ function validar(){
+ //console.log("Validar");
+    return google.script.run.withSuccessHandler(correcto).withFailureHandler(error).validar(regId);
+    } 
+    
+    function correcto(resultado){
+    //console.log("Resultadp");
+    document.getElementById("salida").innerHTML = "Se ha validado correctamente la direccion de correo de "+resultado;
+    }
+    
+    function error(error){
+    //console.log("Error");
+    document.getElementById("salida").innerHTML = error.message;
+    }
+ </script>
+  </head>
+  <body>
+<div id = "maindiv">
+<div class="mx-auto">
+<div class="p-3 mx-auto">
+<div class="p-2">
+<p id="salida" class="h4"  style="color:#006699">Validando empleado <span id="emp_no"></span><script>document.getElementById("emp_no").innerHTML = emp_no+" ";</script><span id="loading" class="spinner-border spinner-border-lg" role="status" aria-hidden="true" ></span></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.onload(validar());
+</script>
+  </body>
+</html>
+
+
