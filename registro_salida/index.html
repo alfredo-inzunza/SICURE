@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <base target="_top">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<?!= include('styleOld'); ?>
+<?!= include('javascriptHead'); ?>
+
+
+    <title>Registro de salida</title>
+</head>
+
+<body style="padding-bottom:auto">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" data-toggle="modal" href="#popup_mod1">Sicure v2.2 </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="#"
+                        target="_self">Registro Entrada</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link"
+                        href="#"
+                        target="_self">Registro Salida</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="#"
+                        target="_self">Registro Empleado</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="mx-auto">
+        <div class="p-3 mx-auto">
+            <div class="p-2">
+                <p class="h2" style="color:#006699">Registro de salida</p>
+                <form id="registro" class="needs-validation" autocomplete="off" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-6">
+                            <label for="unidades">Unidad: </label>
+                            <select name="unidades" id="unidades" class="custom-select" form="registro"
+                                autocomplete="off" autofocus required>
+                                <option selected disabled value="">Selecciona...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Selecciona una unidad.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-6">
+                            <label for="emp_no">Reparador: </label>
+                            <input type="text" class="form-control" maxlength="10" id="emp_no" name="emp_no"
+                                placeholder="No. Empleado" autocomplete="on" pattern="^[0-9^\s]{5,10}$" required>
+                            <div class="invalid-feedback">
+                                Ingresa solo números. 5 a 10 caractéres
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label>¿La unidad fue reparada?</label><br>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="reparada" id="si"
+                                value="si" checked required>
+
+                            <label class="form-check-label" for="si">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="reparada" id="no"
+                                value="no" required>
+
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+
+                    <div id="deimos" style="display:block" class="a-opacity0-100">
+                        <label>¿Realizaste ensamble de Láser?</label><br>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="laser" id="laser_si"
+                                value="si" required>
+                            <label class="form-check-label" for="laser_si">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="laser" id="laser_no"
+                                onClick="no_medicion();" value="no" required>
+                            <label class="form-check-label" for="laser_no">No</label>
+                            <div class="invalid-feedback">
+                                <br>&nbsp;Requerido.
+                            </div>
+                        </div><br>
+                        <label>¿Validaste el correcto ensamble con ayuda del Multimetro?</label><br>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="medicion"
+                                id="medicion_si" value="si" required>
+                            <label class="form-check-label" for="medicion_si">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input form="registro" class="form-check-input" type="radio" name="medicion"
+                                id="medicion_no" value="no" required>
+                            <label class="form-check-label" for="medicion_no">No</label>
+                            <div class="invalid-feedback">
+                                <br>&nbsp;Requerido.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div id="oculta" class="col-md-6 mb-6">
+                            <label for="detalle">Comentarios: </label>
+                            <input type="text" class="form-control" minlength="7" maxlength="30" id="detalle"
+                                name="detalle" autocomplete="off">
+                            <div class="invalid-feedback">
+                                <br>&nbsp;Información requerida.
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="extra" pattern="^[0-9^\s]{5,10}$" required
+                        style="display:none">
+                    <input type="hidden" id="nombre" name="nombre">
+
+                    <button id="enviar" type="submit" class="btn-lg btn btn-primary"
+                        onClick="validar();">Enviar</button>
+                    <button id="actualizar" type="reset" class="btn-lg btn btn-secondary"
+                        onClick="borrarDatos();">Actualizar registros</button>
+                </form>
+
+            </div>
+           
+            <div id="divsalida" class="p-2 alert text-center  alert-primary alert-dismissible fade show" role="alert">
+                <p id="salida" class="h4">
+                </p><span id="loading" class="" role="status" aria-hidden="true"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" style="font-size:130%" id="popup_mod" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="popup_mod" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color:#006699" id="titulo-modal">Titulo</h5>
+                    <button id="popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="body-modal" class="modal-body">
+                    Contenido del cuadro de texto.
+                </div>
+                <div class="p-2 text-center">
+                    <span id="loading2" class="" role="status" aria-hidden="true"></span>
+                </div>
+                <div class="modal-footer">
+                    <button id="cerrar_boton" type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" style="font-size:130%" id="popup_mod1" tabindex="-1" role="dialog"
+        aria-labelledby="popup_mod1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color:#006699" id="titulo-modal">About</h5>
+                    <button id="popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="body-modal" class="modal-body">
+                    Design & Development by jose.inzunza@sanmina.com
+                </div>
+                <div class="p-2 text-center">
+                    <span id="loading2" class="" role="status" aria-hidden="true"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!-- Modal -->
+<div class="modal fade" style="font-size:140%" id="popup_actualizar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="popup_actualizar" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <p style="color:#006699" id="titulo-modal"><b>Actualización encontrada.</b></p>
+      </div>
+      <div id="body-modal" class="modal-body">
+        <p>Existe una nueva actualización, por favor recarga/actualiza esta página para continuar utilizando la aplicación.</p>
+      </div>
+      <div class="modal-footer">
+        <p style="font-size:80%; text-align: right">Reporta anomalias a jose.inzunza@sanmina.com</p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+     <!-- Modal -->
+<div class="modal fade" style="font-size:100%" id="noticias" tabindex="-1" role="dialog" aria-labelledby="noticias" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    
+    
+      <div class="modal-header">
+      
+      <div class="container">
+      <div class = "row">
+      <div class = "col col-lg-9">
+       <div id="titulo-noticia2"><h5 class="modal-title" style="color:#006699" id="titulo-noticia">About</h5></div>
+       </div>
+       <div class="col col-lg-3 text-right">
+       
+       <button id="noticia_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>  
+      
+      
+      <!--<a class="close" href="javascript:cambiarNoticia(0);" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+      
+       <a class="close" href="javascript:cambiarNoticia(1);" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+        -->
+        
+        </div>
+        </div>
+        </div>
+        
+      </div>
+      <div class="progress" style="height: 5px">
+      <div id="progress_bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+      </div>
+      <div id="body-noticia" class="modal-body text-justify">
+       <span id="inicio-noticia">
+       Inicio de noticia
+       </span>
+       <span id="leermas-noticia" class="collapse">
+       Leermas noticia
+       </span>
+       <div id="boton-leermas" class="modal-body text-justify collapse">
+            <button type="button" class="btn btn-primary" onClick="leerMas();">Leer más...</button>
+    </a>
+       </div>
+        
+      </div>
+      <div class="modal-footer">
+      
+      <div class="container">
+      <div class = "row">
+         <div class = "col col-lg-10 text-left">
+         <p style="font-size:90%"><b>Noticias sobre Tecnlología.</b>&nbsp;&nbsp;Fuente: Expansion.mx&nbsp;/&nbsp;
+         <span id="fecha-noticia" alt="Fecha de publicación."></p>
+         </div>
+         
+        <div class = "col col-lg-2 text-right">
+        <!--<button type="button" class="btn btn-primary btn-sm" onClick="cambiarNoticia(1);">Atras</button>&nbsp;<button type="button" class="btn btn-primary btn-sm" onClick="cambiarNoticia(0);">Siguiente</button>-->&nbsp;<button type="button" id="cerrar_noticia" class="btn btn-sm btn-secondary" data-dismiss="modal" onClick="stop_screensaver();">Cerrar</button>
+        </div>
+      </div>
+      </div>
+       </div>
+        
+        
+      </div>
+  
+  
+  </div>
+  </div>
+</div>
+
+
+
+<?!= include('javascriptBody'); ?>
+
+</body>
+
+</html>
