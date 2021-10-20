@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+<title>Registro de Empleado</title>      
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+   <?!= include('style'); ?>
+   <?!= include('javascriptHead'); ?>
+   
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" data-toggle="modal" href="#popup_mod1">Sicure v2.2</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#" target="_self">Registro Entrada</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" target="_self">Registro Salida</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#" target="_self">Registro Empleado</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="mx-auto">
+<div class="p-3 mx-auto">
+<div class="p-2">
+<p class="h2" style="color:#006699">Registro de empleado</p>
+<form id="regemp_registro" class="needs-validation" autocomplete="off" novalidate>
+  <div class="form-row">
+     <div class="col-md-6 mb-6">
+      <label for="regemp_emp_no">Numero de empleado</label>
+      <input type="text" class="form-control" id="regemp_emp_no" name="emp_no" pattern="^[0-9^\s]{5,10}$" maxlength="10" autocomplete="off" required autofocus>
+      <div class="invalid-feedback">
+        Ingresa solo números. 5 a 10 caractéres.
+      </div>
+    </div>
+       <div class="col-md-6 mb-6">
+      <label for="regemp_nombre">Nombre</label>
+      <input type="text" class="form-control" id="regemp_nombre" name="nombre" maxlength="20" autocomplete="off" placeholder="Nombre y Apellido" required>
+      <div class="invalid-feedback">
+       Ingresa nombre y apellido.
+      </div>
+    </div>
+    
+  </div>
+     <div class="form-row">
+    <div class="col-md-6 mb-6">
+      <label for="regemp_tipo">Tipo</label>
+      <select class="custom-select" id="regemp_tipo" name="tipo" form="regemp_registro" required>
+	<option selected disabled value="">Selecciona...</option>
+            <option value="mds">MDS/FA</option>
+            <option value="repa">Reparador</option>
+      </select>
+      <div class="invalid-feedback">
+        Por favor selecciona un tipo válido.
+      </div>
+    </div>
+  </div>
+   <div id="regemp_hide">
+  <div class="form-row">
+    <div class="col-md-6 mb-6">
+      <label for="regemp_correo">Correo electrónico</label>
+      <input type="text" class="form-control" id="regemp_correo" name="correo" placeholder="correo@gmail.com" pattern="^[A-Za-z0-9-._\.^\s]{6,35}@gmail.com\s*$" minlength="6" maxlength="35" autocomplete="off" required>
+      <div class="invalid-feedback">
+        Ingresa un correo válido.
+      </div>
+    </div>
+    </div>
+    </div>
+  <br>
+  <input type="text" class="form-control" id="extra" pattern="^[0-9^\s]{5,10}$" required style="display:none">
+  <button id="regemp_enviar" type="submit" class="btn-lg btn btn-primary" onClick="regemp_validar();">Registrar</button>
+  <button id="regemp_borrar" type="reset" class="btn-lg btn btn-secondary" onClick="regemp_borrarDatos();">Limpiar</button>
+</form>
+</div>
+<br>
+<div id="divsalida" class="p-2 alert text-center  alert-primary alert-dismissible fade show" role="alert"><p id="regemp_salida" class="h4">
+Ingresa la información solicitada.
+</p><span id="regemp_loading" class="" role="status" aria-hidden="true" ></span>
+</div>
+<div id="popup">
+  </div>
+</div>
+</div>
+</div>
+    
+<!-- Modal -->
+<div class="modal fade" style="font-size:130%" id="popup_mod1" tabindex="-1" role="dialog" aria-labelledby="popup_mod1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" style="color:#006699" id="titulo-modal">About</h5>
+        <button id="popup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="body-modal" class="modal-body">
+        Design & Development by jose.inzunza
+      </div>
+      <div class="p-2 text-center">
+      <span id="loading2" class="" role="status" aria-hidden="true" ></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+    <?!= include('javascriptBody'); ?>
+</body>
+
+</html>
