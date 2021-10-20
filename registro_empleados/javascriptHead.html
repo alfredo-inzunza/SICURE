@@ -1,0 +1,97 @@
+<script>
+var correo_temp;
+        function stopRKey(evt) {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type == "text")) {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+        
+        
+        
+        function regemp_enviarDatos() {
+            var form = document.getElementById("regemp_registro");
+            var div = document.getElementById('regemp_salida');
+            correo_temp = document.getElementById('regemp_correo').value;
+            document.getElementById('regemp_loading').className = "spinner-border spinner-border-sm";
+            document.getElementById("regemp_enviar").disabled = true;
+            div.innerHTML = "Enviando información...";
+            //document.getElementById("regemp_enviar").className =  "button button2 disabled";
+            return google.script.run.withSuccessHandler(regemp_escribir).withFailureHandler(regemp_falla).regemp_enviarDatos(form);
+        }
+        
+
+  function regemp_borrarDatos() {
+        var f = document.forms["regemp_registro"].elements;
+            for (var i = 0; i < f.length; i++) {
+                f[i].value = "";
+            }
+            document.getElementById('regemp_emp_no').focus();
+            document.getElementById("regemp_enviar").disabled = false;
+            document.getElementById("regemp_enviar").className =  "btn-lg btn btn-primary";
+            document.getElementById("regemp_registro").className =  "";          
+           
+}
+
+
+function ocultar(){
+var div = document.getElementById('regemp_hide');
+var campo = document.getElementById('regemp_correo');
+var select = document.getElementById('regemp_tipo');
+if(select.value == "repa"){
+campo.value = "usuario01@gmail.com";
+campo.disabled = true;
+div.style.display = "none";
+} else {
+campo.disabled = false;
+if(campo.value == "usuario01@gmail.com") campo.value = "";
+div.style.display = "block";
+}
+
+}
+        function regemp_validar() {
+            var div = document.getElementById('regemp_salida');
+            var pat_emp = new RegExp("^[0-9^\s]{5,10}$");
+            var pat_mail = new RegExp("^[A-Za-z0-9-._\.^\s]{6,35}@gmail.com\s*$");
+            var f = document.forms["regemp_registro"].elements;
+            var submt = true;
+            var boton = document.getElementById('regemp_enviar');
+            var result = pat_emp.test(f[0].value);
+            var result1 = pat_mail.test(f[3].value);
+
+            for (var i = 0; i < f.length-3; i++) {
+                if (f[i].value.length == 0) submt = false;
+                //console.log("F"+i+": "+f[i].value)
+            }
+            
+            console.log(submt+" "+result+" "+result1);
+            if (submt && result && result1) {
+                regemp_enviarDatos();
+            } 
+        }
+
+          function regemp_escribir(datos) {
+          var t = document.getElementById('regemp_tipo').value;
+          document.getElementById('regemp_loading').className = "";
+            var div = document.getElementById('regemp_salida');
+            var nombre = datos;
+            if(t=="mds") div.innerHTML = "<b>"+nombre+"</b> Tu registro casi está listo. Por favor revisa tu bandeja de entrada de correo para completar el registro. Si la direccion ingresada <b>"+correo_temp+"</b> está equivocada, realiza el registro nuevamente con una dirección correcta.";
+            else div.innerHTML = "<b>"+nombre+"</b> Tu registro está completo.";
+            var f = document.forms["regemp_registro"].elements;
+            for (var i = 0; i < f.length; i++) {
+                f[i].value = "";
+            }
+            document.getElementById('regemp_emp_no').focus();
+            document.getElementById('regemp_enviar').disabled = false;
+            regemp_borrarDatos();
+        }
+
+        function regemp_falla(error) {
+        document.getElementById('regemp_loading').className = "";
+            var div = document.getElementById('regemp_salida');
+            div.innerHTML = error.message;
+            document.getElementById('regemp_enviar').disabled = false;
+        }
+    </script>
