@@ -1,0 +1,247 @@
+ <style>
+    @keyframes abrir_ {
+    0% {
+        opacity: 0;
+        z-index: 1;
+        
+        width: 0%;
+   }
+    100% {
+        opacity: 1;
+         z-index: 1;
+       
+        width: 100%;
+    }
+}
+
+@keyframes cerrar_ {
+    0% {
+        opacity: 1;
+        z-index: 1;
+            
+             width: 100%;
+    }
+   
+    100% {
+        opacity: 0;
+        z-index: 1;
+       
+        width: 0%;
+    }
+}
+
+ @keyframes abrir1_ {
+    0% {
+        opacity: 0;
+        z-index: 1;
+        border-width: 0px;
+        width: 0%;
+   }
+    100% {
+        opacity: 1;
+         z-index: 1;
+        border-width: 5px;
+         width:95%;
+    }
+}
+
+@keyframes cerrar1_ {
+    0% {
+        opacity: 1;
+        z-index: 1;
+        width:95%;
+         border-width: 5px;
+    }
+   
+    100% {
+        opacity: 0;
+        z-index: 1;
+        width: 0%;
+         border-width: 0px;
+    }
+}
+
+.abrir {
+    font-family: Sans-serif;
+    animation-name: abrir_;
+    animation-duration: 0.5s;
+    align-content: center;
+    position: absolute;
+    /*top:0;*/
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    display: inline-block;
+    height: 750px;
+    background-color: #006699;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    padding: auto;
+   z-index: 1; 
+   
+}
+
+.cerrar {
+    animation-name: cerrar_;
+    animation-duration: 0.2s;
+    position: absolute;
+    background-color: #006699;
+    width: 0%;
+    height: 750px;
+    text-align: center;
+    margin: auto;
+    /*padding:auto;*/
+    z-index: -1;
+    opacity: 0;
+}
+
+.cerrard {
+    
+    position: absolute;
+    height: 0px;
+    background-color: white;
+    width: 0%;
+    text-align: center;
+    margin: auto;
+    /*padding:auto;*/
+    z-index: -1;
+    opacity: 0;
+}
+
+
+.abrir1 {
+    font-family: Sans-serif;
+    animation-name: abrir1_;
+    animation-duration: 0.5s;
+    background-color:  white;
+    text-align: center;
+    margin: auto;
+    /*padding:auto;*/
+    z-index: 1;
+    display:fixed;
+    border-radius: 25px;
+    height:600px;
+    width:95%;
+    border-style: solid;
+    border-width: 5px;
+    
+}
+
+.cerrar1 {
+    animation-name: cerrar1_;
+    animation-duration: 0.2s;
+    height: 0px;
+    background-color:  #006699;
+    width: 0%;
+    text-align: center;
+    margin: auto;
+    /*padding:auto;*/
+    z-index: -1;
+    display:fixed;
+    height:600px;
+    border-radius: 25px;
+    
+}
+
+.cerrar1d {
+    animation-name: cerrar1_;
+    animation-duration: 1s;
+    height: 0px;
+    background-color: white;
+    width: 0%;
+    text-align: center;
+    margin: auto;
+    /*padding:auto;*/
+    z-index: -1;
+    display:fixed;
+    border-radius: 25px;
+    
+    height:550px;
+    
+    width:95%;
+    
+    
+}
+        @keyframes hide_ {
+        from {opacity: 1;}
+        to {opacity: 0.6;}
+        }
+    
+        @keyframes unhide_ {
+        from {opacity: 0.6;}
+        to {opacity: 1;}
+        }
+        label {
+            text-align: left;
+        }
+        
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+             animation-name: hide_;
+             animation-duration: 1s;
+        }
+        
+        .enabled {
+            cursor: pointer;
+             animation-name: unhide_;
+             animation-duration: 1s;
+        }
+        
+        .inputf {
+            border: 3px solid #ff0000;
+        }
+        
+        .inputp {
+            background-color: #ffffff;
+        }
+        
+        input,
+        select,textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 4px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            /* cursor: pointer; */
+            border-radius: 8px;
+        }
+        
+        .button2 {
+            background-color: #008CBA;
+        }
+        /* Blue */
+        
+        .button3 {
+            background-color: #f44336;
+        }
+        /* Red */
+        
+        .button4 {
+            background-color: #e7e7e7;
+            color: black;
+        }
+        /* Gray */
+        
+        .button5 {
+            background-color: #555555;
+        }
+        /* Black */
+    </style>
